@@ -31,7 +31,7 @@ urlpatterns = [
     # Our admin panel
     path('admin/', admin.site.urls),
     # URL for POST requests to get the token
-    path('api-token-auth/', auth_views.obtain_auth_token, name='api-tokn-auth'),
+    path('api-token-auth/', auth_views.obtain_auth_token, name='api-token-auth'),
     # Login URLs for the browsable API
     # path('api-auth/', include('rest_framework.urls', namespace='rest_framework'))
 ]

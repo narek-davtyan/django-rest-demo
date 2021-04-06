@@ -26,8 +26,7 @@ SECRET_KEY = 'lm0j)dhnt^qf8rqx_(&lee_6)i=)a@=o6rp=yb)@!6g&%zlw!6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-# ALLOWED_HOSTS = ['back-api-dot-django-spring-dash-demo.ew.r.appspot.com', '127.0.0.1']
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['back-api-dot-django-spring-dash-demo.ew.r.appspot.com', '127.0.0.1']
 
 # Application definition
 
