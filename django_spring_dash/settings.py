@@ -25,7 +25,7 @@ SECRET_KEY = 'lm0j)dhnt^qf8rqx_(&lee_6)i=)a@=o6rp=yb)@!6g&%zlw!6'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -119,9 +119,9 @@ else:
             'ENGINE': 'django.db.backends.mysql',
             'HOST': '127.0.0.1',
             'PORT': '3306',
-            'NAME': 'olivertwist',
-            'USER': 'Twist2021',
-            'PASSWORD': 'Users',
+            'NAME': 'Users',
+            'USER': 'olivertwist',
+            'PASSWORD': 'Twist2021',
         }
     }
 # [END db_setup]
