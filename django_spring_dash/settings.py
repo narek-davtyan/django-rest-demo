@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'lm0j)dhnt^qf8rqx_(&lee_6)i=)a@=o6rp=yb)@!6g&%zlw!6'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
-
+if os.getenv('GAE_APPLICATION', None):
+    ALLOWED_HOSTS = ['https://back-api-dot-django-spring-dash-demo.ew.r.appspot.com/']
+else:
+    ALLOWED_HOSTS = ['127.0.0.1']
 
 # Application definition
 
@@ -90,7 +93,7 @@ WSGI_APPLICATION = 'django_spring_dash.wsgi.application'
 # See https://docs.djangoproject.com/en/2.1/ref/databases/#mysql-db-api-drivers
 # for more information
 import pymysql  # noqa: 402
-import os
+
 pymysql.version_info = (1, 4, 6, 'final', 0)  # change mysqlclient version
 pymysql.install_as_MySQLdb()
 
@@ -107,11 +110,19 @@ if os.getenv('GAE_APPLICATION', None):
             'NAME': 'Users',
         }
     }
+elif os.getenv('DJANGO_DB_SQLITE', None):
+    # Use a sqlite3 database when testing in local systems
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
+        }
+    }
 else:
     # Running locally so connect to either a local MySQL instance or connect to
     # Cloud SQL via the proxy. To start the proxy via command line:
     #
-    #     $ cloud_sql_proxy -instances=[INSTANCE_CONNECTION_NAME]=tcp:3306
+    #     $ cloud_sql_proxy -instances="django-spring-dash-demo:europe-west2:django-mysql-dash"=tcp:3306
     #
     # See https://cloud.google.com/sql/docs/mysql-connect-proxy
     DATABASES = {
@@ -125,15 +136,6 @@ else:
         }
     }
 # [END db_setup]
-
-# Use a in-memory sqlite3 database when testing in CI systems
-if os.getenv('TRAMPOLINE_CI', None):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3')
-        }
-    }
 
 
 # Password validation
