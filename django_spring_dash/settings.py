@@ -11,17 +11,34 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 
 from pathlib import Path
-import os
+import os, sys
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+def find_or_create_secret_key():
+    """ 
+    Look for secret_key.py and return the SECRET_KEY entry in it if the file exists.
+    Otherwise, generate a new secret key, save it in secret_key.py, and return the key.
+    """
+    SECRET_KEY_DIR = os.path.dirname(__file__)
+    SECRET_KEY_FILEPATH = os.path.join(SECRET_KEY_DIR, 'secret_key.py') 
+    sys.path.insert(1,SECRET_KEY_DIR) 
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
+    if os.path.isfile(SECRET_KEY_FILEPATH):
+        from secret_key import SECRET_KEY
+        return SECRET_KEY
+    else:
+        from django.utils.crypto import get_random_string
+        chars = 'abcdefghijklmnopqrstuvwxyz0123456789!@#$%^&amp;*(-_=+)'
+        new_key = get_random_string(50, chars)
+        with open(SECRET_KEY_FILEPATH, 'w') as f:
+            f.write("# Django secret key\n# Do NOT check this into version control.\n\nSECRET_KEY = '%s'\n" % new_key)
+        from secret_key import SECRET_KEY
+        return SECRET_KEY
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'lm0j)dhnt^qf8rqx_(&lee_6)i=)a@=o6rp=yb)@!6g&%zlw!6'
+# Make this unique, and don't share it with anybody.
+SECRET_KEY = find_or_create_secret_key()
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -82,6 +99,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'django_spring_dash.wsgi.application'
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
